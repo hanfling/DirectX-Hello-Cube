@@ -121,12 +121,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	void BoxDemo::DrawScene() {
-		md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Red));
+		md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Silver));
 		md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		md3dImmediateContext->IASetInputLayout(mInputLayout);
-		md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+		md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ);
+		
 		UINT stride = sizeof(Vertex);
 		UINT offset = 0;
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mBoxVB, &stride, &offset);
@@ -145,7 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 
-			md3dImmediateContext->DrawIndexed(36, 0, 0);
+			md3dImmediateContext->DrawIndexed(36*2, 0, 0);
 		}
 
 		HR(mSwapChain->Present(0, 0));
@@ -191,8 +191,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	void BoxDemo::BuildGeometryBuffers()
 	{
+		XMVECTORF32 Clear = {0.0f, 0.0f, 0.0f, 0.0f};
+
+		XMVECTORF32 MinusWhite     = {-1.0f, -1.0f, -1.0f, -1.0f};
+		XMVECTORF32 MinusBlack     = {-0.0f, -0.0f, -0.0f, -1.0f};
+		XMVECTORF32 MinusRed       = {-1.0f, -0.0f, -0.0f, -1.0f};
+		XMVECTORF32 MinusGreen     = {-0.0f, -1.0f, -0.0f, -1.0f};
+		XMVECTORF32 MinusBlue      = {-0.0f, -0.0f, -1.0f, -1.0f};
+		XMVECTORF32 MinusYellow    = {-1.0f, -1.0f, -0.0f, -1.0f};
+		XMVECTORF32 MinusCyan      = {-0.0f, -1.0f, -1.0f, -1.0f};
+		XMVECTORF32 MinusMagenta   = {-1.0f, -0.0f, -1.0f, -1.0f};
+
 		Vertex vertices[] =
 		{
+			// Actual vertices.
 			{XMFLOAT3(-1.0f,-1.0f,-1.0f),XMFLOAT4((const float*) &Colors::White)},
 			{XMFLOAT3(-1.0f, 1.0f,-1.0f),XMFLOAT4((const float*) &Colors::Black)},
 			{XMFLOAT3(1.0f, 1.0f,-1.0f), XMFLOAT4((const float*) &Colors::Red)},
@@ -202,11 +214,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			{XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4((const float*) &Colors::Cyan)},
 			{XMFLOAT3(1.0f,-1.0f, 1.0f), XMFLOAT4((const float*) &Colors::Magenta)},
 
+			// Actual vertices.
+			{XMFLOAT3(-1.0f,-1.0f,-1.0f),XMFLOAT4((const float*) &MinusWhite)},
+			{XMFLOAT3(-1.0f, 1.0f,-1.0f),XMFLOAT4((const float*) &MinusBlack)},
+			{XMFLOAT3(1.0f, 1.0f,-1.0f), XMFLOAT4((const float*) &MinusRed)},
+			{XMFLOAT3(1.0f,-1.0f,-1.0f), XMFLOAT4((const float*) &MinusGreen)},
+			{XMFLOAT3(-1.0f,-1.0f, 1.0f),XMFLOAT4((const float*) &MinusBlue)},
+			{XMFLOAT3(-1.0f, 1.0f, 1.0f),XMFLOAT4((const float*) &MinusYellow)},
+			{XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4((const float*) &MinusCyan)},
+			{XMFLOAT3(1.0f,-1.0f, 1.0f), XMFLOAT4((const float*) &MinusMagenta)},
+
+			// Dummy.
+			{XMFLOAT3(0.0f, 0.0f,0.0f),XMFLOAT4((const float*) &Clear)},
 		};
 
 		D3D11_BUFFER_DESC vbd;
 		vbd.Usage = D3D11_USAGE_IMMUTABLE;
-		vbd.ByteWidth = sizeof(Vertex) * 8;
+		vbd.ByteWidth = sizeof(Vertex) * (8 * 2 +1 );
 		vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vbd.CPUAccessFlags = 0;
 		vbd.MiscFlags = 0;
@@ -216,34 +240,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
 
 		UINT indices[] = {
-			//front face
-			0,1,2,
-			0,2,3,
+			//front face (barycentric/triangles)
+			0,17,1,17,2,8+1,
+			2,17,3,17,0,8+3,
 
-			//back face
-			4,6,5,
-			4,7,6,
+			//back face (barycentric/triangles)
+			6,17,5,17,4,8+5,
+			4,17,7,17,6,8+7,
 
-			//left face
-			4,5,1,
-			4,1,0,
+			//left face (linear/quad)
+			4,17,5,17,1,0,
+			1,17,0,17,4,5,
 
-			//right Face
-			3,2,6,
-			3,6,7,
+			//right Face (linear/quad)
+			3,17,2,17,6,7,
+			6,17,7,17,3,2,
 
-			//top face
-			1,5,6,
-			1,6,2,
+			//top face (barycentric/triangles)
+			1,17,5,17,6,8+5,
+			6,17,2,17,1,8+2,
 
-			//bottom face
-			4,0,3,
-			4,3,7
+			//bottom face (linear/quad)
+			4,17,0,17,3,7,
+			3,17,7,17,4,0
 		};
 
 		D3D11_BUFFER_DESC ibd;
 		ibd.Usage = D3D11_USAGE_IMMUTABLE;
-		ibd.ByteWidth = sizeof(UINT) * 36;
+		ibd.ByteWidth = sizeof(UINT) * 36 * 2;
 		ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		ibd.CPUAccessFlags = 0;
 		ibd.MiscFlags = 0;
