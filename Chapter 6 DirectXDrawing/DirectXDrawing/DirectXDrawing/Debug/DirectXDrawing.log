@@ -1,0 +1,22 @@
+﻿  d3dApp.cpp
+  d3dUtil.cpp
+  DDSTextureLoader.cpp
+  dxerr.cpp
+  GameTimer.cpp
+  GeometryGenerator.cpp
+  LightHelper.cpp
+  MathHelper.cpp
+  Waves.cpp
+  BoxDemo.cpp
+C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\DirectXDrawing\BoxDemo.cpp(260,15): warning C4552: '!=': result of expression not used
+C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\DirectXDrawing\BoxDemo.cpp(261,15): warning C4552: '!=': result of expression not used
+  Generating Code...
+C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\DirectXDrawing\BoxDemo.cpp(67): warning C4715: 'WinMain': not all control paths return a value
+  LINK : C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\DirectXDrawing.exe not found or not built by the last incremental link; performing full link
+Effects11d.lib(d3dxGlobal.obj) : warning LNK4099: PDB 'Effects11.pdb' was not found with 'Effects11d.lib(d3dxGlobal.obj)' or at 'C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\Effects11.pdb'; linking object as if no debug info
+Effects11d.lib(EffectAPI.obj) : warning LNK4099: PDB 'Effects11.pdb' was not found with 'Effects11d.lib(EffectAPI.obj)' or at 'C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\Effects11.pdb'; linking object as if no debug info
+Effects11d.lib(EffectLoad.obj) : warning LNK4099: PDB 'Effects11.pdb' was not found with 'Effects11d.lib(EffectLoad.obj)' or at 'C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\Effects11.pdb'; linking object as if no debug info
+Effects11d.lib(EffectNonRuntime.obj) : warning LNK4099: PDB 'Effects11.pdb' was not found with 'Effects11d.lib(EffectNonRuntime.obj)' or at 'C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\Effects11.pdb'; linking object as if no debug info
+Effects11d.lib(EffectReflection.obj) : warning LNK4099: PDB 'Effects11.pdb' was not found with 'Effects11d.lib(EffectReflection.obj)' or at 'C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\Effects11.pdb'; linking object as if no debug info
+Effects11d.lib(EffectRuntime.obj) : warning LNK4099: PDB 'Effects11.pdb' was not found with 'Effects11d.lib(EffectRuntime.obj)' or at 'C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\Effects11.pdb'; linking object as if no debug info
+  DirectXDrawing.vcxproj -> C:\Users\Juan\Documents\HelloCube\Chapter 6 DirectXDrawing\DirectXDrawing\Debug\DirectXDrawing.exe
